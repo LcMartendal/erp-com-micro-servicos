@@ -329,6 +329,7 @@ server.error.include-message=always
 | `GET` continua com `value: null` | `erp-custos-calculo` fora do ar ou mensagem na DLQ | veja o log do calculo e o painel do RabbitMQ |
 | `Port 8080 was already in use` | os dois serviços usam 8080 por padrão | `SERVER_PORT=8081` ou `-p 8081:8080` no calculo |
 | `PRECONDITION_FAILED ... inequivalent arg` | filas já existiam no broker com argumentos diferentes | apague as filas antigas no painel (ou `rabbitmqctl delete_queue <fila>`) e suba de novo |
+
 | Erro de conversão após atualizar o projeto | mensagens antigas (serialização Java) ainda na fila | limpe as filas (purge) |
 
 ---
@@ -338,5 +339,3 @@ server.error.include-message=always
 - O total da conta não tem período: é usado como está, qualquer que seja o período consultado.
 - Há um único valor por rubrica e por produto. Um novo cálculo sobrescreve o anterior (não há histórico por período).
 - O pedido de cálculo vai em uma única mensagem com todos os dados do período. Dividir em uma mensagem por produto/rubrica permitiria paralelizar entre instâncias e reprocessar só o item que falhou.
-- Erros de negócio (por exemplo, período sem horas) passam pelo retry e vão para a DLQ. O evento `CalculoFalhou` ainda não foi implementado.
-- Os materiais não entram no custo (só a transformação).
